@@ -1,0 +1,373 @@
+/* ============================================================
+   MicroMola — Ocean Theme Stylesheet
+   Mobile-first · Scrollable · Mola mola inspired
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Space+Mono:wght@400;700&display=swap');
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Design tokens ── */
+:root {
+  --accent:    #38b4c8;
+  --accent2:   #7de8d4;
+  --border:    rgba(56, 180, 200, 0.18);
+  --border-hi: rgba(56, 180, 200, 0.55);
+  --card:      rgba(4, 22, 42, 0.92);
+  --hover-bg:  rgba(56, 180, 200, 0.06);
+  --muted:     #a8cdd6;
+  --text:      #d4eef5;
+}
+
+/* ── Body ──
+   KEY FIX: no overflow:hidden, no flex centering.
+   Block layout lets the page scroll naturally on mobile.
+   background-attachment:fixed keeps the ocean behind scrolled content. */
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  padding: 1.5rem 1rem;
+  font-family: 'Space Mono', monospace;
+  color: var(--text);
+  position: relative;
+
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(10,40,80,0.9) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 20% 20%,  rgba(2,20,50,0.6)  0%, transparent 60%),
+    linear-gradient(180deg, #010810 0%, #020d18 40%, #031525 100%);
+  background-attachment: fixed;
+}
+
+/* ── Caustic light overlay (fixed, purely decorative) ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(175deg, rgba(56,180,200,0.05)  0%, transparent 40%),
+    linear-gradient(168deg, rgba(125,232,212,0.03) 10%, transparent 50%),
+    linear-gradient(182deg, rgba(56,180,200,0.04)  5%, transparent 45%);
+  animation: causticShift 12s ease-in-out infinite alternate;
+}
+
+@keyframes causticShift {
+  from { opacity: 0.6; transform: scaleX(1);    }
+  to   { opacity: 1;   transform: scaleX(1.06); }
+}
+
+/* ── Floating particles (fixed) ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(1px 1px at 12%  30%, rgba(56,180,200,0.45)  0%, transparent 100%),
+    radial-gradient(2px 2px at 28%  70%, rgba(125,232,212,0.3)  0%, transparent 100%),
+    radial-gradient(1px 1px at 47%  20%, rgba(56,180,200,0.4)   0%, transparent 100%),
+    radial-gradient(2px 2px at 63%  55%, rgba(125,232,212,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 79%  80%, rgba(56,180,200,0.35)  0%, transparent 100%),
+    radial-gradient(1px 1px at 91%  40%, rgba(125,232,212,0.4)  0%, transparent 100%);
+  animation: drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  from { transform: translateY(0);     }
+  to   { transform: translateY(-14px); }
+}
+
+/* ── Card ── */
+.card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  /* grow to fill remaining viewport height */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 1.5rem 1.125rem;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 0 0 1px rgba(56,180,200,0.05),
+    0 8px 40px rgba(0,0,0,0.6),
+    0 0 50px rgba(56,180,200,0.03) inset;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Cyan corner brackets */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px;
+  width: 16px; height: 16px;
+  border-top:  1.5px solid var(--accent);
+  border-left: 1.5px solid var(--accent);
+}
+.card::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; right: -1px;
+  width: 16px; height: 16px;
+  border-bottom: 1.5px solid var(--accent);
+  border-right:  1.5px solid var(--accent);
+}
+
+/* Teal corner brackets on inner content */
+.card-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Links section grows to push footer down */
+.links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.125rem 0;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(to right, transparent, var(--accent), var(--accent2), transparent) 1;
+  border-image-slice: 1;
+}
+.card-content::before {
+  content: '';
+  position: absolute;
+  top: -1px; right: -1px;
+  width: 16px; height: 16px;
+  border-top:   1.5px solid var(--accent2);
+  border-right: 1.5px solid var(--accent2);
+}
+.card-content::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: -1px;
+  width: 16px; height: 16px;
+  border-bottom: 1.5px solid var(--accent2);
+  border-left:   1.5px solid var(--accent2);
+}
+
+/* ── Header ── */
+.header {
+  padding-bottom: 1.25rem;
+  margin-bottom: 0;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(to right, transparent, var(--accent), var(--accent2), transparent) 1;
+  border-image-slice: 1;
+  animation: fadeUp 0.8s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Eyebrow label */
+.header > div:first-child {
+  font-size: 0.5rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.header > div:first-child::before {
+  content: '';
+  width: 6px; height: 6px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: blink 3s ease-in-out infinite;
+}
+.header > div:first-child::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--border-hi), transparent);
+}
+
+/* Large title */
+.header > div:nth-child(2) {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 7vw, 2.5rem); /* fluid: shrinks on tiny screens */
+  line-height: 1.08;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  word-break: break-word;
+  display: flex;
+  flex-direction: column;
+}
+.header > div:nth-child(2) em {
+  font-style: italic;
+  color: var(--accent2);
+}
+
+/* Tagline */
+.header > div:nth-child(3) {
+  font-size: 0.58rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  margin-top: 0.6rem;
+  line-height: 1.7;
+}
+
+/* ── Links section ── */
+
+/* ── Video ── */
+.links video {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  border: 1px solid var(--border);
+  margin-bottom: 0.5rem;
+  box-shadow: 0 0 18px rgba(56,180,200,0.08);
+  /* Respect safe area on notched phones */
+  border-radius: 2px;
+}
+
+/* ── Link items ──
+   min-height:48px meets the 48×48px touch target recommendation */
+.link-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 0.75rem;
+  min-height: 48px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  color: var(--text);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* Tap highlight for Android */
+  -webkit-tap-highlight-color: rgba(56,180,200,0.12);
+}
+
+/* Shimmer sweep */
+.link-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(56,180,200,0.07), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.45s ease;
+  pointer-events: none;
+}
+.link-item:hover::before,
+.link-item:active::before {
+  transform: translateX(100%);
+}
+
+/* Arrow */
+.link-item::after {
+  content: '→';
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.link-item:hover,
+.link-item:active {
+  background: var(--hover-bg);
+  border-color: var(--border);
+}
+.link-item:hover::after,
+.link-item:active::after {
+  transform: translateX(4px);
+  color: var(--accent2);
+}
+
+/* Staggered entrance */
+.link-item:nth-child(2) { animation-delay: 0.20s; }
+.link-item:nth-child(3) { animation-delay: 0.28s; }
+.link-item:nth-child(4) { animation-delay: 0.36s; }
+.link-item:nth-child(5) { animation-delay: 0.44s; }
+
+/* ── Link text ── */
+.link-text {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Footer ── */
+.footer {
+  margin-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  animation: fadeUp 0.6s 0.52s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.footer-text {
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.footer::after {
+  content: '● Active';
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  text-shadow: 0 0 6px var(--accent2);
+  animation: blink 2.5s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+/* ── Keyframes ── */
+@keyframes blink {
+  0%, 100% { opacity: 1;    }
+  50%       { opacity: 0.2; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── Larger screens (≥540px): add breathing room ── */
+@media (min-width: 540px) {
+  body {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .card {
+    padding: 2.25rem 2rem;
+  }
+}
